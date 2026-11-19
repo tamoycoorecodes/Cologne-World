@@ -1,0 +1,12 @@
+@model IEnumerable<CologneWorld.Models.Product>
+@{ ViewData["Title"] = "Admin - Manage Products"; }
+<div class="container py-5">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4"><div><h1 class="fw-bold">Product Management</h1><p class="text-muted mb-0">Admin dashboard · @Model.Count() products</p></div><a asp-action="Create" class="btn btn-primary-custom"><i class="fas fa-plus me-2"></i>Add Product</a></div>
+    @if (TempData["SuccessMessage"] != null) { <div class="alert alert-success">@TempData["SuccessMessage"]</div> }
+    <div class="table-responsive product-card p-3"><table class="table table-hover align-middle mb-0"><thead><tr><th>Product</th><th>Category</th><th>Price</th><th class="text-end">Actions</th></tr></thead><tbody>
+    @foreach (var product in Model) { <tr><td><div class="d-flex align-items-center gap-3"><img src="@product.ImageUrl" alt="" style="width:55px;height:55px;object-fit:cover;border-radius:8px" /><strong>@product.Name</strong></div></td><td>@product.Category</td><td>@product.UnitPrice.ToString("C")</td><td class="text-end"><a asp-action="Edit" asp-route-id="@product.ProductId" class="btn btn-sm btn-outline-primary">Edit</a> <form asp-action="Delete" asp-route-id="@product.ProductId" method="post" class="d-inline" onsubmit="return confirm('Delete this product?')"><button type="submit" class="btn btn-sm btn-outline-danger">Delete</button></form></td></tr> }
+    </tbody></table></div>
+    <p class="mt-3"><a asp-controller="Products" asp-action="Index">View public storefront</a></p>
+</div>
+
+<div class="container mb-4"><a asp-controller="Admin" asp-action="Users" class="btn btn-outline-primary"><i class="fas fa-users me-1"></i>Manage Users</a></div>

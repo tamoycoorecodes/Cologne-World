@@ -1,0 +1,35 @@
+@model IEnumerable<CologneWorld.Models.AppUser>
+@using Microsoft.AspNetCore.Identity
+@{
+    ViewData["Title"] = "Manage Users";
+    var userRoles = (Dictionary<string, IList<string>>)ViewBag.UserRoles;
+}
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div><h1><i class="fas fa-users me-2"></i>Manage Users</h1><p class="text-muted mb-0">View registered accounts and manage their access roles.</p></div>
+        <a asp-controller="Admin" asp-action="Index" class="btn btn-outline-secondary">Back to Products</a>
+    </div>
+    <div class="product-card p-3">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead><tr><th>Name</th><th>Email</th><th>Current Role</th><th>Change Role</th><th>Registered</th></tr></thead>
+                <tbody>
+                @foreach (var user in Model) {
+                    var roles = userRoles.TryGetValue(user.Id, out var assigned) ? assigned : new List<string>();
+                    var currentRole = roles.FirstOrDefault() ?? "Customer";
+                    <tr>
+                        <td>@user.FirstName @user.LastName</td><td>@user.Email</td><td><span class="badge bg-secondary">@string.Join(", ", roles)</span></td>
+                        <td><form asp-controller="Admin" asp-action="SetUserRole" method="post" class="d-flex gap-2">
+                            @Html.AntiForgeryToken()<input type="hidden" name="userId" value="@user.Id" />
+                            <select name="role" class="form-select form-select-sm" style="max-width:130px"><option value="Customer" selected="@(currentRole == "Customer")">Customer</option><option value="Admin" selected="@(currentRole == "Admin")">Admin</option></select>
+                            <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                        </form></td>
+                        <td>@user.CreatedAt.ToLocalTime().ToString("dd MMM yyyy")</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+        @if (!Model.Any()) { <p class="text-muted text-center mb-0">No registered users yet.</p> }
+    </div>
+</div>

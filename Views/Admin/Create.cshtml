@@ -1,0 +1,4 @@
+@model CologneWorld.Models.Product
+@{ ViewData["Title"] = "Add Product"; }
+<div class="container py-5"><div class="row justify-content-center"><div class="col-lg-8"><div class="product-card p-4"><h1 class="mb-4">Add Product</h1><form asp-action="Create" method="post"><partial name="_ProductForm" model="Model" /><button class="btn btn-primary-custom" type="submit">Save Product</button> <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a></form></div></div></div></div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }
